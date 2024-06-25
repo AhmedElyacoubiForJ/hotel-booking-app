@@ -1,4 +1,4 @@
-package edu.yacoubi.hotel_backend.controller.dto;
+package edu.yacoubi.hotel_backend.dto.responseDto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,22 +8,22 @@ import java.math.BigDecimal;
 import java.util.List;
 @Data
 @NoArgsConstructor
-public class RoomResponse {
+public class RoomResponseDto {
     private Long id;
     private String roomType;
     private BigDecimal roomPrice;
     private boolean isBooked;
     private String photo;
-    List<BookingResponse> bookings;
+    List<BookingResponseDto> bookings;
 
-    public RoomResponse(Long id, String roomType, BigDecimal roomPrice) {
+    public RoomResponseDto(Long id, String roomType, BigDecimal roomPrice) {
         this.id = id;
         this.roomType = roomType;
         this.roomPrice = roomPrice;
     }
 
-    public RoomResponse(Long id, String roomType, BigDecimal roomPrice, boolean isBooked,
-                        byte[] photoAsBytes, List<BookingResponse> bookings) {
+    public RoomResponseDto(Long id, String roomType, BigDecimal roomPrice, boolean isBooked,
+                           byte[] photoAsBytes, List<BookingResponseDto> bookings) {
         this.id = id;
         this.roomType = roomType;
         this.roomPrice = roomPrice;

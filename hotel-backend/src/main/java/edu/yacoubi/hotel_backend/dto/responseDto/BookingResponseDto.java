@@ -1,4 +1,4 @@
-package edu.yacoubi.hotel_backend.controller.dto;
+package edu.yacoubi.hotel_backend.dto.responseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingResponse {
+public class BookingResponseDto {
     private Long bookingId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
@@ -18,10 +18,10 @@ public class BookingResponse {
     private int numberOfChildren;
     private int totalNumberOfGuest;
     private String bookingConfirmationCode;
-    private RoomResponse room;
+    private RoomResponseDto room;
 
-    public BookingResponse(Long bookingId, LocalDate checkInDate,
-                           LocalDate checkOutDate, String bookingConfirmationCode) {
+    public BookingResponseDto(Long bookingId, LocalDate checkInDate,
+                              LocalDate checkOutDate, String bookingConfirmationCode) {
         this.bookingId = bookingId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;

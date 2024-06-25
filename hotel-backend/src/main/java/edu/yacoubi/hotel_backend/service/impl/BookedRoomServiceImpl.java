@@ -1,4 +1,8 @@
 package edu.yacoubi.hotel_backend.service.impl;
 
-public class BookedRoomServiceImpl {
+import edu.yacoubi.hotel_backend.service.IBookedRoomService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class BookedRoomServiceImpl implements IBookedRoomService {
 }
