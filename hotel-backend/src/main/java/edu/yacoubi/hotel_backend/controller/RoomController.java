@@ -1,6 +1,6 @@
 package edu.yacoubi.hotel_backend.controller;
 
-import edu.yacoubi.hotel_backend.dto.responseDto.RoomResponseDto;
+import edu.yacoubi.hotel_backend.dto.RoomResponseDto;
 import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import lombok.RequiredArgsConstructor;

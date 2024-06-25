@@ -1,4 +1,4 @@
-package edu.yacoubi.hotel_backend.dto.responseDto;
+package edu.yacoubi.hotel_backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
