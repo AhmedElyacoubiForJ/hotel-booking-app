@@ -17,9 +17,14 @@ const AddRoom = () => {
     setRoom({ ...room, [name]: value });
   };
 
+  const handleImageChange = (e) => {
+    const fileName = e.target.files[0];
+    setRoom({ ...room, photo: fileName });
+    setImagePreview(URL.createObjectURL(fileName));
+  };
+
   const handleAddRoomSubmit = (e) => {
     e.preventDefault();
-    //const formData = new FormData();
     addRoom(photo, roomType, roomPrice)
       .then((res) => {
         setSuccessMessage("Room added successfully");
@@ -39,12 +44,13 @@ const AddRoom = () => {
     <>
       <section className="container mt-5 mb-5">
         <div className="room justify-content-center">
-          
           <div className="col-md-8 col-lg-6">
             <h2 className="mt-5 mb-2">Add a New Room</h2>
-            <form className="form" onSubmit={handleAddRoomSubmit} >
+            <form className="form" onSubmit={handleAddRoomSubmit}>
               <div className="mb-3">
-                <label className="form-label" htmlFor="roomType">Room Type</label>
+                <label className="form-label" htmlFor="roomType">
+                  Room Type
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -52,10 +58,13 @@ const AddRoom = () => {
                   name="roomType"
                   value={roomType}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="roomType">Room Price</label>
+                <label className="form-label" htmlFor="roomType">
+                  Room Price
+                </label>
                 <input
                   type="number"
                   className="form-control"
@@ -63,27 +72,35 @@ const AddRoom = () => {
                   name="roomPrice"
                   value={roomPrice}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="photo">Photo</label>
+                <label className="form-label" htmlFor="photo">
+                  Room Photo
+                </label>
                 <input
                   type="file"
                   className="form-control"
                   id="photo"
                   name="photo"
-                  onChange={(e) => {
-                    setRoom({ ...room, photo: e.target.files[0] });
-                    setImagePreview(URL.createObjectURL(e.target.files[0]));
-                  }}
+                  onChange={handleImageChange}
+                  required
                 />
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    className="mb-3"
+                    alt="Preview room photo"
+                    style={{ maxWidth: "400px", maxHeight: "400px"}}
+                  />
+                )}
               </div>
               <button type="submit" className="btn btn-success">
                 Add Room
               </button>
             </form>
           </div>
-
         </div>
       </section>
     </>
