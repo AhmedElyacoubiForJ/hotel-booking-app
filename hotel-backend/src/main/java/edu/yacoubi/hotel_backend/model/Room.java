@@ -19,7 +19,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Room {
     @Id
@@ -31,13 +30,19 @@ public class Room {
     @Lob
     private Blob photo;
 
-    @OneToMany(fetch = LAZY, cascade = ALL)
-    private List<BookedRoom> bookings = new ArrayList<>(); // historical
+    @OneToMany(mappedBy = "room", fetch = LAZY, cascade = ALL)
+    private List<BookedRoom> bookings; // = new ArrayList<>(); // historical
 
-    public void addBooking(BookedRoom booking) {
+    public Room() {
+        this.bookings = new ArrayList<>();
+    }
+    public void addBooking(BookedRoom booking){
+        if (bookings == null){
+            bookings = new ArrayList<>();
+        }
         bookings.add(booking);
         booking.setRoom(this);
-        this.isBooked = true;
+        isBooked = true;
         String bookingCode = RandomStringUtils.randomNumeric(10);
         booking.setBookingConfirmationCode(bookingCode);
     }

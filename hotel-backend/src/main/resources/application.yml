@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   application:
     name: hotel-backend
@@ -21,11 +22,18 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+      format_sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         temp:
         globally_quoted_identifiers: true
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+      #enabled: true
+      file-size-threshold: 2KB
 
 
