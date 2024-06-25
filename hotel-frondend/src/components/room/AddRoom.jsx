@@ -92,13 +92,15 @@ const AddRoom = () => {
                     src={imagePreview}
                     className="mb-3"
                     alt="Preview room photo"
-                    style={{ maxWidth: "400px", maxHeight: "400px"}}
+                    style={{ maxWidth: "400px", maxHeight: "400px" }}
                   />
                 )}
               </div>
-              <button type="submit" className="btn btn-success">
-                Add Room
-              </button>
+              <div className="d-grid d-md-flex mt-2">
+                <button type="submit" className="btn btn-outline-primary ml-5">
+                  Add Room
+                </button>
+              </div>
             </form>
           </div>
         </div>
