@@ -1,4 +1,6 @@
 npm run dev
+npm install axios
+npm install react-bootstrap bootstrap
 
 # React + Vite
 

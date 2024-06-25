@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/room")
+@RequestMapping("/rooms")
 public class RoomController {
 
     private final IRoomService roomService;
