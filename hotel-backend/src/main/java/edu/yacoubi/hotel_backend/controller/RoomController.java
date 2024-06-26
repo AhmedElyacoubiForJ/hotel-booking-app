@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ public class RoomController {
             @RequestParam("roomType") final String roomType,
             @RequestParam("roomPrice") final BigDecimal roomPrice
     ) throws SQLException, IOException {
-       // System.out.println(photo.toString());
         Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice);
         return ResponseEntity.ok(new RoomResponseDto(
                 savedRoom.getId(),
@@ -41,5 +40,20 @@ public class RoomController {
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
         //return Arrays.asList("Single Room", "Multiple Room", "Double Room");
+    }
+
+    // get All Rooms endpoint
+    @GetMapping("/all")
+    public ResponseEntity<List<RoomResponseDto>> getAllRooms() {
+        List<Room> rooms = roomService.getAllRooms();
+        List<RoomResponseDto> roomResponseDtos = rooms.stream().map(room -> {
+            return new RoomResponseDto(
+                    room.getId(),
+                    room.getRoomType(),
+                    room.getRoomPrice()
+            );
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(roomResponseDtos);
     }
 }

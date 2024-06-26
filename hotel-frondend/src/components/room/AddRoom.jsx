@@ -37,8 +37,11 @@ const AddRoom = () => {
         setErrorMessage("Error adding new room");
         setRoom(defaultRoomState);
         setImagePreview("");
-        console.log(err.response.data.message);
       });
+      setTimeout(() => {
+        setSuccessMessage("");
+        setErrorMessage("");
+      }, 3000) // after 3 s. clean messages
   };
 
   return (
@@ -47,6 +50,19 @@ const AddRoom = () => {
         <div className="room justify-content-center">
           <div className="col-md-8 col-lg-6">
             <h2 className="mt-5 mb-2">Add a New Room</h2>
+            {successMessage && (
+              <div className="alert alert-success fade show" role="alert">
+                {successMessage}
+              </div>
+            )}
+
+            {errorMessage && (
+              <div className="alert alert-danger fade show" role="alert">
+                {errorMessage}
+              </div>
+            )}  
+
+
             <form className="form" onSubmit={handleAddRoomSubmit}>
               <div className="mb-3">
                 <label className="form-label" htmlFor="roomType">
