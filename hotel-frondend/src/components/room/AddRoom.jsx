@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { addRoom } from "../utils/ApiFunctions";
+import RoomTypeSelector from "../common/RoomTypeSelector";
 
 const AddRoom = () => {
   const defaultRoomState = { photo: null, roomType: "", roomPrice: 0 };
@@ -12,7 +13,7 @@ const AddRoom = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleChange = (e) => {
+  const handleOnChange = (e) => {
     const { name, value } = e.target;
     setRoom({ ...room, [name]: value });
   };
@@ -51,15 +52,12 @@ const AddRoom = () => {
                 <label className="form-label" htmlFor="roomType">
                   Room Type
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="roomType"
-                  name="roomType"
-                  value={roomType}
-                  onChange={handleChange}
-                  required
-                />
+                <div>
+                  <RoomTypeSelector
+                    room={room}
+                    handleOnChange={handleOnChange}
+                  />
+                </div>
               </div>
               <div className="mb-3">
                 <label className="form-label" htmlFor="roomType">
@@ -71,7 +69,7 @@ const AddRoom = () => {
                   id="roomPrice"
                   name="roomPrice"
                   value={roomPrice}
-                  onChange={handleChange}
+                  onChange={handleOnChange}
                   required
                 />
               </div>
