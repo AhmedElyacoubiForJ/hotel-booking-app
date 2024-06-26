@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -40,6 +39,7 @@ public class RoomController {
 
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
-        return Arrays.asList("Single Room", "Multiple Room", "Double Room");
+        return roomService.getAllRoomTypes();
+        //return Arrays.asList("Single Room", "Multiple Room", "Double Room");
     }
 }
