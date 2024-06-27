@@ -1,26 +1,27 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 const RoomPaginator = ({ totalPages, currentPage, handleGoToPage }) => {
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
   return (
-    <ul className="nav nav-pills">
-      {pageNumbers.map((pageNumber) => (
-        <li key={pageNumber}>
-          <button
+    <nav>
+      <ul className="pagination justify-content-center mt-2">
+        {pageNumbers.map((pageNumber) => (
+          <li
             key={pageNumber}
-            onClick={() => handleGoToPage(pageNumber)}
-            className={`${
-              pageNumber === currentPage
-                ? "btn btn-info ms-1"
-                : "btn btn-outline-info ms-1"
+            className={`page-item ${
+              pageNumber === currentPage ? "active" : ""
             }`}
           >
-            {pageNumber}
-          </button>
-        </li>
-      ))}
-    </ul>
+            <button
+              onClick={() => handleGoToPage(pageNumber)}
+              className="page-link"
+            >
+              {pageNumber}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
