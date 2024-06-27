@@ -30,12 +30,12 @@ public class Room {
     private Blob photo;
 
     @OneToMany(mappedBy = "room", fetch = LAZY, cascade = ALL)
-    private List<BookedRoom> bookings; // = new ArrayList<>(); // historical
+    private List<Booking> bookings; // historical
 
     public Room() {
         this.bookings = new ArrayList<>();
     }
-    public void addBooking(BookedRoom booking){
+    public void addBooking(Booking booking){
         if (bookings == null){
             bookings = new ArrayList<>();
         }
