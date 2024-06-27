@@ -25,7 +25,6 @@ export async function getRoomTypes() {
 }
 
 // get all rooms
-
 export async function getAllRooms() {
   try {
     const res = await api.get("/rooms/all");
