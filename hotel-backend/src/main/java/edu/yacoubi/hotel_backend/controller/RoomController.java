@@ -8,12 +8,14 @@ import edu.yacoubi.hotel_backend.service.IBookingService;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,6 @@ public class RoomController {
     @GetMapping("/room/types")
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
-        //return Arrays.asList("Single Room", "Multiple Room", "Double Room");
     }
 
     // get All Rooms endpoint
@@ -54,6 +55,27 @@ public class RoomController {
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponseList = getAllRoomResponse(rooms);
         return ResponseEntity.ok(roomResponseList);
+    }
+    // Test get Photo bytes by room id
+    @GetMapping(
+            value = "/photo/{roomId}",
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
+    )
+    public ResponseEntity<byte[]> getRoomPhotoByRoomId(@PathVariable("roomId") Long roomId) throws SQLException {
+
+        byte[] photoBytes = roomService.getRoomPhotoByRoomId(roomId);
+        return ResponseEntity.ok().body(photoBytes);
+    }
+
+    // Test get Photo encoded as Base64 by room id
+    @GetMapping(value = "/photo/encoded/{roomId}")
+    public ResponseEntity<String> getRoomPhotoEncodedByRoomId(@PathVariable("roomId") Long roomId) throws SQLException {
+        byte[] photoBytes = roomService.getRoomPhotoByRoomId(roomId);
+        String photoBytesEncoded = null;
+        if (photoBytes!= null) {
+            photoBytesEncoded = Base64.encodeBase64String(photoBytes);
+        }
+        return ResponseEntity.ok().body(photoBytesEncoded);
     }
 
     private List<RoomResponse> getAllRoomResponse(List<Room> rooms) throws SQLException {
