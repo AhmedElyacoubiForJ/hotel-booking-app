@@ -7,15 +7,15 @@ import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.service.IBookingService;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +72,11 @@ public class RoomController {
     public ResponseEntity<String> getRoomPhotoEncodedByRoomId(@PathVariable("roomId") Long roomId) throws SQLException {
         byte[] photoBytes = roomService.getRoomPhotoByRoomId(roomId);
         String photoBytesEncoded = null;
+        // TODO test
         if (photoBytes!= null) {
-            photoBytesEncoded = Base64.encodeBase64String(photoBytes);
+            Base64 base64 = new Base64();
+            photoBytesEncoded = new String(base64.encode(photoBytes));
+            //photoBytesEncoded = null; //Base64.encodeBase64String(photoBytes);
         }
         return ResponseEntity.ok().body(photoBytesEncoded);
     }
