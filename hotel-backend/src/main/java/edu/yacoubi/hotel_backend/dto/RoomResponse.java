@@ -2,7 +2,8 @@ package edu.yacoubi.hotel_backend.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
+
+import org.apache.commons.codec.binary.Base64;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,7 +29,7 @@ public class RoomResponse {
         this.roomType = roomType;
         this.roomPrice = roomPrice;
         this.isBooked = isBooked;
-        this.photo = photoAsBytes != null ? Base64.encodeBase64String(photoAsBytes) : null;
+        this.photo = photoAsBytes != null ? new String(new Base64().encode(photoAsBytes)) : null;
         this.bookings = bookings;
     }
 }

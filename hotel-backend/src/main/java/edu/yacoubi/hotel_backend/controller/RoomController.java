@@ -76,7 +76,6 @@ public class RoomController {
         if (photoBytes!= null) {
             Base64 base64 = new Base64();
             photoBytesEncoded = new String(base64.encode(photoBytes));
-            //photoBytesEncoded = null; //Base64.encodeBase64String(photoBytes);
         }
         return ResponseEntity.ok().body(photoBytesEncoded);
     }
