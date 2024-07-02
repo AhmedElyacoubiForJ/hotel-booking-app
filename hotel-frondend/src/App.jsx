@@ -5,14 +5,15 @@ import { getAllRooms } from "./components/utils/ApiFunctions";
 
 import AddRoom from "./components/room/AddRoom";
 import RoomPaginator from "./components/common/RoomPaginator";
+import RoomList from "./components/room/RoomList";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(1);
+  //const [currentPage, setCurrentPage] = useState(1);
 
-  const handleGoToPage = (page) => {
+  /* const handleGoToPage = (page) => {
     setCurrentPage(page);
   };
-
+ */
   useEffect(() => {
     // getAllRooms().then(rooms => {
     //   console.log(rooms)
@@ -21,12 +22,13 @@ function App() {
 
   return (
     <>
+      <RoomList />
       {/* <AddRoom /> */}
-      <RoomPaginator
+      {/* <RoomPaginator
         totalPages={10}
         currentPage={currentPage}
         handleGoToPage={handleGoToPage}
-      />{" "}
+      />{" "} */}
       {/* pagination component */}
     </>
   );

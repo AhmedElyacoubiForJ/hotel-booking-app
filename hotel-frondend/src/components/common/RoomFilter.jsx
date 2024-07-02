@@ -1,46 +1,47 @@
-import React, { useState, useEffect } from "react";
-import RoomTypeSelector from "./RoomTypeSelector";
+import React, { useState } from "react";
 
-const RoomFilter = ({ rooms, doFilterRooms }) => {
-  const [roomTypefilter, setRoomTypeFilter] = useState("");
+// Room Types Chooser
+const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
+  const headerOption = "All";
+  const [selectedOption, setSelectedOption] = useState(headerOption);
+  const roomTypeOptions = new Set(allRooms.map((room) => room.roomType));
 
-  const roomTypes = ["All", ...new Set(rooms.map((room) => room.roomType))];
+  const roomTypes = [headerOption, ...roomTypeOptions];
 
-  const handleFilterChange = (e) => {
-    setRoomTypeFilter(e.target.value);
-    const roomsFilterd = rooms.React.Children.filter((room) =>
-      room.roomType.toLowerCase().includes(roomTypefilter)
-    );
-    doFilter(roomsFilterd);
+  const onSelectedChange = (e) => {
+    const selected = e.target.value;
+    setSelectedOption(selected);
+    setSelectedRoomType(selected);
   };
 
-  const makeDefaultState = () => {
-    setRoomTypeFilter("");
-    doFilterRooms(rooms);
+  const makeDefaultOption = () => {
+    setSelectedOption(headerOption);
+    setSelectedRoomType(headerOption)
   };
 
   return (
     <>
       <div className="input-group mb-3">
         <span className="input-group-text" id="roomTypeFilter">
-          Filter rooms by type
+          Room types
         </span>
         <select
           className="form-select"
-          value={roomTypefilter}
-          onChange={handleFilterChange}
+          arial-label="Room Type Filter"
+          value={selectedOption}
+          onChange={onSelectedChange}
         >
-          <option value={""}>Select room type to filter...</option>
-          {roomTypes.map((roomType, index) => (
-            <option key={index} value={roomType}>
-              {roomType}
+          {/* <option value={filter}></option> */}
+          {roomTypes.map((type, index) => (
+            <option key={index} value={type}>
+              {type}
             </option>
           ))}
         </select>
         <button
           className="btn btn-hotel"
           type="button"
-          onClick={makeDefaultState}
+          onClick={makeDefaultOption}
         >
           Clear Filter
         </button>
