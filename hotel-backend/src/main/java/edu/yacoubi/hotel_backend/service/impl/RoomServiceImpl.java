@@ -6,7 +6,6 @@ import edu.yacoubi.hotel_backend.repository.RoomRepository;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,5 +65,14 @@ public class RoomServiceImpl implements IRoomService {
         byte[] photoBlobBytes = photoBlob.getBytes(1, (int) (photoBlob.length()));
 
         return photoBlobBytes;
+    }
+
+    @Override
+    public void deleteRoom(Long id) {
+        Optional<Room> optionalRoom = roomRepository.findById(id);
+        if (!optionalRoom.isPresent()) {
+            throw new ResourceNotFoundException(String.format("Room with id %d does not exist", id));
+        }
+        roomRepository.deleteById(id);
     }
 }

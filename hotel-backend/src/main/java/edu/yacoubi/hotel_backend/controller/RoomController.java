@@ -93,6 +93,13 @@ public class RoomController {
         return roomResponseList;
     }
 
+    // delete a room endpoint
+    @DeleteMapping("/delete/{roomId}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long id) {
+        roomService.deleteRoom(id);
+        return ResponseEntity.noContent().build();
+    }
+
     private RoomResponse getRoomResponse(Room room, String photoBase64) {
         RoomResponse roomResponse = new RoomResponse();
         roomResponse.setId(room.getId());

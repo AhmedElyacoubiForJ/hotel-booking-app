@@ -1,6 +1,8 @@
 npm run dev
 npm install axios
 npm install react-bootstrap bootstrap
+npm i react-icons
+npm i react-router-dom
 
 # React + Vite
 
