@@ -62,18 +62,6 @@ public class RoomServiceImpl implements IRoomService {
         return roomRepository.findAll();
     }
 
-    /*@Override
-    public byte[] getRoomPhotoByRoomId(Long id) throws SQLException {
-        Room room = getRoomById(id);
-        Blob photoBlob = room.getPhoto();
-
-        if (photoBlob == null) return null;
-
-        byte[] photoBlobBytes = photoBlob.getBytes(1, (int) (photoBlob.length()));
-
-        return photoBlobBytes;
-    }*/
-
     @Override
     public byte[] getPhotoByRoomId(Long id) {
         if (!roomRepository.existsById(id))

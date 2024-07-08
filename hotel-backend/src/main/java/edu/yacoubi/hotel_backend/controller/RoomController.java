@@ -86,7 +86,7 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}")
-    public ResponseEntity<RoomResponse> getRoomById(@PathVariable("roomId") Long roomId) throws SQLException {
+    public ResponseEntity<RoomResponse> getRoomById(@PathVariable("roomId") Long roomId) {
         Room room = roomService.getRoomById(roomId);
         RoomResponse roomResponse = roomToRoomResponse(room);
 

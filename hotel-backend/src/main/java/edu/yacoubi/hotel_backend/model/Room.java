@@ -28,7 +28,6 @@ public class Room {
     private boolean isBooked = false;
     @Lob
     private Blob photo;
-
     @OneToMany(mappedBy = "room", fetch = LAZY, cascade = ALL)
     private List<Booking> bookings; // historical
 
