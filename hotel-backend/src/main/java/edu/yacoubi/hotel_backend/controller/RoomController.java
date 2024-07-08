@@ -95,22 +95,13 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable("roomId") Long roomId,
-            @RequestParam(value = "roomType", required = false) final String roomType,
-            @RequestParam(value = "roomPrice", required = false) final String roomPrice,
-            @RequestParam(value = "photo", required = false) final MultipartFile photo) throws SQLException, IOException {
+                                                   @RequestParam(value = "roomType") final String roomType,
+                                                   @RequestParam(value = "roomPrice") final BigDecimal roomPrice,
+                                                   @RequestParam(value = "photo") final MultipartFile photoFile) {
 
-        byte[] photoBytes = (photo != null && !photo.isEmpty())
-                ? photo.getBytes()
-                : roomService.getPhotoByRoomId(roomId);
-        Room updatedRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoBytes);
-        Blob photoBlob = photoBytes != null && photoBytes.length > 0
-                ? new SerialBlob(photoBytes)
-                : null;
-        // TODO TEST w. NEW JPA model
-        //updatedRoom.setPhoto(photoBlob);
-        //RoomResponse roomResponse = getRoomResponse(updatedRoom);
-
-        return ResponseEntity.ok().body(null);
+        Room updatedRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoFile);
+        RoomResponse roomResponse = roomToRoomResponse(updatedRoom);
+        return ResponseEntity.ok().body(roomResponse);
     }
 
     private List<RoomResponse> getAllRoomResponse(List<Room> rooms) {
