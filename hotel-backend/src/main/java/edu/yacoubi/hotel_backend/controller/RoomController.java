@@ -7,8 +7,6 @@ import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.service.IBookingService;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.EncoderException;
-import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +34,7 @@ public class RoomController {
     private final IBookingService bookingService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
+    public ResponseEntity<List<RoomResponse>> getAllRooms() {
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponseList = getAllRoomResponse(rooms);
         return ResponseEntity.ok(roomResponseList);
@@ -61,7 +59,6 @@ public class RoomController {
         return roomService.getAllRoomTypes();
     }
 
-    // Test get Photo bytes by room id
     @GetMapping(
             value = "/test/photo/{roomId}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
@@ -71,7 +68,6 @@ public class RoomController {
         return ResponseEntity.ok().body(photoBytes);
     }
 
-    // Test get Photo encoded as Base64 by room id
     @GetMapping(value = "/test/photo/encoded/{roomId}")
     public ResponseEntity<String> getRoomPhotoEncodedByRoomId(@PathVariable("roomId") Long roomId) {
         byte[] photoBytes = roomService.getPhotoByRoomId(roomId);
@@ -83,13 +79,12 @@ public class RoomController {
         return ResponseEntity.ok().body(photoBase64);
     }
 
-    // delete a room endpoint
     @DeleteMapping("/delete/{roomId}")
     public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long id) {
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();
     }
-    // get Room by id
+
     @GetMapping("/{roomId}")
     public ResponseEntity<RoomResponse> getRoomById(@PathVariable("roomId") Long roomId) throws SQLException {
         Room room = roomService.getRoomById(roomId);
@@ -98,7 +93,6 @@ public class RoomController {
         return ResponseEntity.ok().body(roomResponse);
     }
 
-    // update room
     @PutMapping("/update/{roomId}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable("roomId") Long roomId,
             @RequestParam(value = "roomType", required = false) final String roomType,
