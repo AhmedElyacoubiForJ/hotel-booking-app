@@ -1,6 +1,6 @@
 package edu.yacoubi.hotel_backend.service.impl;
 
-import edu.yacoubi.hotel_backend.exception.ResourceNotFoundException;
+import edu.yacoubi.hotel_backend.exception.RoomNotFoundException;
 import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.repository.RoomRepository;
 import edu.yacoubi.hotel_backend.service.IRoomService;
@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,17 +24,28 @@ import java.util.Optional;
 public class RoomServiceImpl implements IRoomService {
 
     private final RoomRepository roomRepository;
+    private String NOT_FOUND_MESSAGE = "Room with ID=%d does not exist";
 
     @Override
     public Room addNewRoom(MultipartFile file, String roomType,
-                           BigDecimal roomPrice) throws IOException, SQLException {
+                           BigDecimal roomPrice) {
         Room room = new Room();
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);
 
         if (!file.isEmpty()) {
-            byte[] photoBytes = file.getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
+            byte[] photoBytes = null;
+            try {
+                photoBytes = file.getBytes();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Blob photoBlob = null;
+            try {
+                photoBlob = new SerialBlob(photoBytes);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             room.setPhoto(photoBlob);
         }
 
@@ -52,27 +62,46 @@ public class RoomServiceImpl implements IRoomService {
         return roomRepository.findAll();
     }
 
-    @Override
-    public byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException {
-        Optional<Room> optionalRoom = roomRepository.findById(roomId);
-        if (!optionalRoom.isPresent()) {
-            throw new ResourceNotFoundException(String.format("Room with id %d does not exist", roomId));
-        }
-        // get photo blob
-        Blob photoBlob = optionalRoom.get().getPhoto();
+    /*@Override
+    public byte[] getRoomPhotoByRoomId(Long id) throws SQLException {
+        Room room = getRoomById(id);
+        Blob photoBlob = room.getPhoto();
+
         if (photoBlob == null) return null;
 
         byte[] photoBlobBytes = photoBlob.getBytes(1, (int) (photoBlob.length()));
 
         return photoBlobBytes;
+    }*/
+
+    @Override
+    public byte[] getPhotoByRoomId(Long id) {
+        if (!roomRepository.existsById(id))
+            throw new RoomNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
+
+        return roomRepository.findPhotoByRoomId(id);
     }
 
     @Override
     public void deleteRoom(Long id) {
-        Optional<Room> optionalRoom = roomRepository.findById(id);
-        if (!optionalRoom.isPresent()) {
-            throw new ResourceNotFoundException(String.format("Room with id %d does not exist", id));
-        }
+        if (!roomRepository.existsById(id))
+            throw new RoomNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
+
         roomRepository.deleteById(id);
+    }
+
+    @Override
+    public Room getRoomById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> {
+                    String message = String.format("Room with ID=%d does not exist", id);
+                    log.error(message);
+                    return new RoomNotFoundException(message);
+                });
+    }
+
+    @Override
+    public Room updateRoom(Long roomId, String roomType, String roomPrice, byte[] photoBytes) {
+        return null;
     }
 }
