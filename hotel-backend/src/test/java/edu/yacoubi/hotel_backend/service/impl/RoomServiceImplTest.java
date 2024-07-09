@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -137,5 +138,20 @@ class RoomServiceImplTest {
         // then
         verify(roomRepository).existsById(eq(roomId));
         verify(roomRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    void shouldGetRoomById() {
+        // given
+        Long roomId = 1L;
+        Room room = new Room();
+        when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
+
+        // when
+        Room result = underTest.getRoomById(roomId);
+
+        // then
+        assertEquals(room, result);
+        verify(roomRepository).findById(eq(roomId));
     }
 }
