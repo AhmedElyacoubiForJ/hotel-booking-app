@@ -64,4 +64,18 @@ class RoomServiceImplTest {
         assertEquals(roomPrice, capturedRoom.getRoomPrice());
         assertNotNull(capturedRoom.getPhoto());
     }
+
+    @Test
+    void shouldGetAllRoomTypes() {
+        // given
+        List<String> roomTypes = Arrays.asList("Single Room", "Double Room", "Lodge room", "Luxury room");
+        when(roomRepository.findDistinctRoomTypes()).thenReturn(roomTypes);
+
+        // when
+        List<String> result = underTest.getAllRoomTypes();
+
+        // then
+        assertEquals(roomTypes, result);
+        verify(roomRepository).findDistinctRoomTypes();
+    }
 }
