@@ -198,12 +198,13 @@ class RoomServiceImplTest {
         String roomType = null;
         BigDecimal roomPrice = BigDecimal.valueOf(100);
         MultipartFile file = new MockMultipartFile("photo", "photo.jpg", "image/jpeg", "photo content".getBytes());
+        when(roomRepository.findById(eq(roomId))).thenReturn(Optional.of(new Room()));
 
         // when
         assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, file));
 
         // then
-        verify(roomRepository, never()).findById(anyLong());
+        verify(roomRepository).findById(eq(roomId));
         verify(roomRepository, never()).save(any());
     }
 }
