@@ -1,5 +1,6 @@
 package edu.yacoubi.hotel_backend.service.impl;
 
+import edu.yacoubi.hotel_backend.exception.RoomNotFoundException;
 import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.repository.RoomRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,5 +95,33 @@ class RoomServiceImplTest {
         assertEquals(photoBytes, result);
         verify(roomRepository).existsById(eq(id));
         verify(roomRepository).findPhotoByRoomId(eq(id));
+    }
+
+    @Test
+    void shouldThrownRoomNotFoundExceptionWhenGettingPhotoByNonExistingRoomId() {
+        // given
+        Long roomId = 1L;
+        when(roomRepository.existsById(roomId)).thenReturn(false);
+
+        // when
+        assertThrows(RoomNotFoundException.class, () -> underTest.getPhotoByRoomId(roomId));
+
+        // then
+        verify(roomRepository).existsById(eq(roomId));
+        verify(roomRepository, never()).findPhotoByRoomId(anyLong());
+    }
+
+    @Test
+    void shouldDeleteRoom() {
+        // given
+        Long roomId = 1L;
+        when(roomRepository.existsById(roomId)).thenReturn(true);
+
+        // when
+        underTest.deleteRoom(roomId);
+
+        // then
+        verify(roomRepository).existsById(eq(roomId));
+        verify(roomRepository).deleteById(eq(roomId));
     }
 }
