@@ -45,3 +45,32 @@ export async function deleteRoom(roomId) {
     );
   }
 }
+
+export async function updateRoom(roomId, roomData) {
+  console.log("Updating room");
+  const formData = new FormData();
+  formData.append("roomType", roomData.roomType);
+  formData.append("roomPrice", roomData.roomPrice);
+  formData.append("photo", roomData.photo);
+  try {
+    const response = await api.put(`/rooms/update/${roomId}`, formData
+      //, {headers: {"Content-Type": "multipart/form-data",},}
+  );
+    return response;
+  } catch (error) {
+    throw new Error(
+      `Error updating room with ID : ${roomId} : ${error.message}`
+    );
+  }
+}
+
+export async function getRoomById(roomId) {
+  try {
+    const result = await api.get(`/rooms/${roomId}`);
+    return result.data;
+  } catch (error) {
+    //console.log(error.response.data.statusCode)
+    //console.log(error.response.data.message);
+    throw new Error(`Fetching error: ${error.response.data.message}`);
+  }
+}

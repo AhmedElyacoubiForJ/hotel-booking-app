@@ -12,7 +12,8 @@ function App() {
     <main>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          {/* <Route exact path="/" element={<Home />} /> */}
+          <Route exact path="/" element={<RoomList />} />
           <Route exact path="/edit-room/:roomId" element={<EditRoom />} />
           <Route exact path="/rooms-list" element={<RoomList />} />
         </Routes>

@@ -86,10 +86,9 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}")
-    public ResponseEntity<RoomResponse> getRoomById(@PathVariable("roomId") Long roomId) {
-        Room room = roomService.getRoomById(roomId);
+    public ResponseEntity<RoomResponse> getRoomById(@PathVariable("roomId") Long id) {
+        Room room = roomService.getRoomById(id);
         RoomResponse roomResponse = roomToRoomResponse(room);
-
         return ResponseEntity.ok().body(roomResponse);
     }
 
@@ -98,7 +97,7 @@ public class RoomController {
                                                    @RequestParam(value = "roomType") final String roomType,
                                                    @RequestParam(value = "roomPrice") final BigDecimal roomPrice,
                                                    @RequestParam(value = "photo") final MultipartFile photoFile) {
-
+        System.out.println("updateRoom");
         Room updatedRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoFile);
         RoomResponse roomResponse = roomToRoomResponse(updatedRoom);
         return ResponseEntity.ok().body(roomResponse);
