@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 const NavBar = () => {
+  const [showAccount, setShowAccount] = useState(false);
+
+  const handleAccountClick = () => {
+    setShowAccount(!showAccount);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-5 sticky-top">
       <div className="container-fluid">
@@ -44,15 +50,20 @@ const NavBar = () => {
             </li>
             <li className="nav-item dropdown">
               <a
-                className={`nav-link dropdown-toggle`}
+                className={`nav-link dropdown-toggle ${showAccount ? "show" : ""}`}
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                onClick={handleAccountClick}
               >
+                {" "}
                 Account
               </a>
-              <ul className="dropdown-menu show" aria-labelledby="navbarDropdown">
+              <ul
+                className={`dropdown-menu ${showAccount ? "show" : ""}`}
+                aria-labelledby="navbarDropdown"
+              >
                 <li className="dropdown-item">
                   <Link to={"/login"} className="dropdown-item">
                     Login

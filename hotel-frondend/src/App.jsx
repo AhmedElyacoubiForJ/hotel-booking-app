@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Footer from "./components/layout/Footer";
 import NavBar from "./components/layout/NavBar";
-import RoomList from "./components/room/RoomList";
+import ManageRooms from "./components/room/ManageRooms";
 import Home from "./components/home/Home";
 import EditRoom from "./components/room/EditRoom";
 import AddRoom from "./components/room/AddRoom";
@@ -17,7 +17,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route exact path="/add-room" element={<AddRoom />} />
-            <Route exact path="/rooms-list" element={<RoomList />} />
+            <Route exact path="/manage-rooms" element={<ManageRooms />} />
             <Route exact path="/edit-room/:roomId" element={<EditRoom />} />
           </Routes>
         </Router>
