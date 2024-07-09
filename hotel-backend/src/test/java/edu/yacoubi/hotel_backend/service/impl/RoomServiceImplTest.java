@@ -124,4 +124,18 @@ class RoomServiceImplTest {
         verify(roomRepository).existsById(eq(roomId));
         verify(roomRepository).deleteById(eq(roomId));
     }
+
+    @Test
+    void shouldThrownRoomNotFoundExceptionWhenDeletingNonExistingRoom() {
+        // given
+        Long roomId = 1L;
+        when(roomRepository.existsById(roomId)).thenReturn(false);
+
+        // when
+        assertThrows(RoomNotFoundException.class, () -> underTest.deleteRoom(roomId));
+
+        // then
+        verify(roomRepository).existsById(eq(roomId));
+        verify(roomRepository, never()).deleteById(anyLong());
+    }
 }
