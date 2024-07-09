@@ -78,4 +78,21 @@ class RoomServiceImplTest {
         assertEquals(roomTypes, result);
         verify(roomRepository).findDistinctRoomTypes();
     }
+
+    @Test
+    void shouldGetPhotoByRoomId() {
+        // given
+        Long id = 1L;
+        byte[] photoBytes = "photo content".getBytes();
+        when(roomRepository.existsById(id)).thenReturn(true);
+        when(roomRepository.findPhotoByRoomId(id)).thenReturn(photoBytes);
+
+        // when
+        byte[] result = underTest.getPhotoByRoomId(id);
+
+        // then
+        assertEquals(photoBytes, result);
+        verify(roomRepository).existsById(eq(id));
+        verify(roomRepository).findPhotoByRoomId(eq(id));
+    }
 }
