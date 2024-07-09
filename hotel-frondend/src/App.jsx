@@ -2,6 +2,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "/node_modules/bootstrap/dist/js/bootstrap.min.js"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
+import Footer from "./components/layout/Footer"
 import RoomList from "./components/room/RoomList";
 import Home from "./components/home/Home";
 import EditRoom from "./components/room/EditRoom";
@@ -18,6 +19,7 @@ function App() {
           <Route exact path="/rooms-list" element={<RoomList />} />
           <Route exact path="/add-room" element={<AddRoom />} />
         </Routes>
+        <Footer />
       </Router>
     </main>
     </>
