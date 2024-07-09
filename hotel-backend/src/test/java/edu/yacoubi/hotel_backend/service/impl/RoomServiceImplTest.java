@@ -154,4 +154,40 @@ class RoomServiceImplTest {
         assertEquals(room, result);
         verify(roomRepository).findById(eq(roomId));
     }
+
+    @Test
+    void shouldThrownRoomNotFoundExceptionWhenGettingNonExistingRoomById() {
+        // given
+        Long roomId = 1L;
+        when(roomRepository.findById(roomId)).thenReturn(Optional.empty());
+
+        // when
+        assertThrows(RoomNotFoundException.class, () -> underTest.getRoomById(roomId));
+
+        // then
+        verify(roomRepository).findById(eq(roomId));
+    }
+
+    @Test
+    void shouldUpdateRoom() {
+        // given
+        Long roomId = 1L;
+        MultipartFile file = new MockMultipartFile("photo", "photo.jpg", "image/jpeg", "photo content".getBytes());
+        String roomType = "Single Room";
+        BigDecimal roomPrice = new BigDecimal(100);
+        Room existingRoom = new Room();
+        existingRoom.setId(roomId);
+        when(roomRepository.findById(roomId)).thenReturn(Optional.of(existingRoom));
+
+        // when
+        Room result = underTest.updateRoom(roomId, roomType, roomPrice, file);
+
+        // then
+        verify(roomRepository).findById(eq(roomId));
+        verify(roomRepository).save(roomArgumentCaptor.capture());
+        Room capturedRoom = roomArgumentCaptor.getValue();
+        assertEquals(roomType, capturedRoom.getRoomType());
+        assertEquals(roomPrice, capturedRoom.getRoomPrice());
+        assertNotNull(capturedRoom.getPhoto());
+    }
 }
