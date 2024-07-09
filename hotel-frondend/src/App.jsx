@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import RoomList from "./components/room/RoomList";
 import Home from "./components/home/Home";
 import EditRoom from "./components/room/EditRoom";
-
+import AddRoom from "./components/room/AddRoom";
 function App() {
   return (
     <>
@@ -16,6 +16,7 @@ function App() {
           <Route exact path="/" element={<RoomList />} />
           <Route exact path="/edit-room/:roomId" element={<EditRoom />} />
           <Route exact path="/rooms-list" element={<RoomList />} />
+          <Route exact path="/add-room" element={<AddRoom />} />
         </Routes>
       </Router>
     </main>

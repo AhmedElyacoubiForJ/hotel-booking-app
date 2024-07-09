@@ -16,7 +16,7 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
 
   const makeDefaultOption = () => {
     setSelectedOption(headerOption);
-    setSelectedRoomType(headerOption)
+    setSelectedRoomType(headerOption);
   };
 
   return (
@@ -27,11 +27,10 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
         </span>
         <select
           className="form-select"
-          arial-label="Room Type Filter"
+          arial-label="room type filter"
           value={selectedOption}
           onChange={onSelectedChange}
         >
-          {/* <option value={filter}></option> */}
           {roomTypes.map((type, index) => (
             <option key={index} value={type}>
               {type}

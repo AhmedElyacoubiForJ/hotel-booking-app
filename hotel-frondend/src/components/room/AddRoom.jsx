@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { addRoom } from "../utils/ApiFunctions";
@@ -38,10 +39,10 @@ const AddRoom = () => {
         setRoom(defaultRoomState);
         setImagePreview("");
       });
-      setTimeout(() => {
-        setSuccessMessage("");
-        setErrorMessage("");
-      }, 3000) // after 3 s. clean messages
+    setTimeout(() => {
+      setSuccessMessage("");
+      setErrorMessage("");
+    }, 3000); // after 3 s. clean messages
   };
 
   return (
@@ -60,8 +61,7 @@ const AddRoom = () => {
               <div className="alert alert-danger fade show" role="alert">
                 {errorMessage}
               </div>
-            )}  
-
+            )}
 
             <form className="form" onSubmit={handleAddRoomSubmit}>
               <div className="mb-3">
@@ -110,9 +110,12 @@ const AddRoom = () => {
                   />
                 )}
               </div>
-              <div className="d-grid d-md-flex mt-2">
+              <div className="d-grid gap-2 d-md-flex mt-2">
+                <Link to="/rooms-list" className="btn btn-outline-info">
+                  Back to rooms
+                </Link>
                 <button type="submit" className="btn btn-outline-primary ml-5">
-                  Add Room
+                  Save Room
                 </button>
               </div>
             </form>

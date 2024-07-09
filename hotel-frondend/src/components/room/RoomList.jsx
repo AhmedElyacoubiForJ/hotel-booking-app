@@ -19,7 +19,7 @@ const RoomList = () => {
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [roomsPerPage] = useState(8);
+  const [roomsPerPage] = useState(2);
   const [numberOfPages, setNumberOfPages] = useState(0);
 
   const handleGoToPage = (page) => {
@@ -49,7 +49,7 @@ const RoomList = () => {
       if (result === "") {
         const updatedRooms = rooms.filter((room) => room.id !== roomId);
         setRooms(updatedRooms);
-        setSuccessMessage(`Room with ID: ${roomId} was deleted`);
+        setSuccessMessage(`Room No.: ${roomId} was deleted`);
         //fetchRooms();
       } else {
         console.log(`Error deleting room : ${roomId} : ${result.message}`);
@@ -120,8 +120,8 @@ const RoomList = () => {
               </Col>
               <Col md={6}>
                 <div className="d-flex justify-content-end">
-                  <Link to="/rooms/add" className="btn btn-primary">
-                    <FaPlus /> Add New Room
+                  <Link to="/add-room" className="btn btn-primary">
+                    <FaPlus /> Add Room
                   </Link>
                 </div>
               </Col>
