@@ -190,4 +190,20 @@ class RoomServiceImplTest {
         assertEquals(roomPrice, capturedRoom.getRoomPrice());
         assertNotNull(capturedRoom.getPhoto());
     }
+
+    @Test
+    void shouldThrownIllegalArgumentExceptionWhenUpdatingRoomWithInvalidParameters() {
+        // given
+        Long roomId = 1L;
+        String roomType = null;
+        BigDecimal roomPrice = BigDecimal.valueOf(100);
+        MultipartFile file = new MockMultipartFile("photo", "photo.jpg", "image/jpeg", "photo content".getBytes());
+
+        // when
+        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, file));
+
+        // then
+        verify(roomRepository, never()).findById(anyLong());
+        verify(roomRepository, never()).save(any());
+    }
 }
