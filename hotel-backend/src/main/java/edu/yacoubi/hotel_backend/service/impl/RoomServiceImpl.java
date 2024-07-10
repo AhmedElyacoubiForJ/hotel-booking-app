@@ -101,7 +101,7 @@ public class RoomServiceImpl implements IRoomService {
         if (roomPrice == null) {
             throw new IllegalArgumentException("Room price cannot be null");
         }
-        if (file == null && file.isEmpty()) {
+        if (file == null ) {
             throw new IllegalArgumentException("Photo cannot be null or empty");
         }
 

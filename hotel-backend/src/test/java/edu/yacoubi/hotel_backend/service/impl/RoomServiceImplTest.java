@@ -195,13 +195,15 @@ class RoomServiceImplTest {
     void shouldThrownIllegalArgumentExceptionWhenUpdatingRoomWithInvalidParameters() {
         // given
         Long roomId = 1L;
-        String roomType = null;
+        String roomType = "Single Room";
         BigDecimal roomPrice = BigDecimal.valueOf(100);
         MultipartFile file = new MockMultipartFile("photo", "photo.jpg", "image/jpeg", "photo content".getBytes());
         when(roomRepository.findById(eq(roomId))).thenReturn(Optional.of(new Room()));
 
         // when
-        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, file));
+        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, null, roomPrice, file));
+        //assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, null, file));
+        //assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, null));
 
         // then
         verify(roomRepository).findById(eq(roomId));
