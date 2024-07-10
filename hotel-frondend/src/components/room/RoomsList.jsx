@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+import { Col, Container, Row } from "react-bootstrap";
+
 import { getAllRooms } from "../utils/ApiFunctions";
+import RoomCard from "./RoomCard";
+import RoomFilter from "../common/RoomFilter";
+import RoomPaginator from "../common/RoomPaginator";
 
 const RoomsList = () => {
   const [rooms, setRooms] = useState([]);
@@ -9,6 +14,7 @@ const RoomsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [roomsPerPage] = useState(6);
   const [filteredRooms, setFilteredRooms] = useState([]);
+  const [selectedRoomType, setSelectedRoomType] = useState("");
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,6 +30,34 @@ const RoomsList = () => {
       });
   }, []);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const totalPages = Math.ceil(filteredRooms.length / roomsPerPage);
+
+  const renderRoomsAsCardFiltered = () => {
+    const startIndex = (currentPage - 1) * roomsPerPage;
+    const endIndex = startIndex + roomsPerPage;
+    return filteredRooms.slice(startIndex, endIndex).map((room) => {
+      return <RoomCard key={room.id} room={room} />;
+    });
+  };
+
+  const doFilterRoomsByRoomType = (keyword) => {
+    if (keyword === "" || keyword === "All") {
+      setFilteredRooms(rooms);
+    } else {
+      const roomsToKeyword = rooms.filter((room) => room.roomType === keyword);
+      setFilteredRooms(roomsToKeyword);
+    }
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    doFilterRoomsByRoomType(selectedRoomType);
+  }, [rooms, selectedRoomType]);
+
   if (isLoading) {
     return <div>Loading rooms...</div>;
   }
@@ -32,11 +66,30 @@ const RoomsList = () => {
   }
 
   return (
-    <>
-      <div>
-        <h1>ddsd</h1>
-      </div>
-    </>
+    <Container>
+      <Row>
+        <Col md={6} className="mb-3 mb-md-0">
+          <RoomFilter allRooms={rooms} setSelectedRoomType={setSelectedRoomType} />
+        </Col>
+        <Col md={6} className="d-flex align-items-center justify-content-end">
+          <RoomPaginator
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handleGoToPage={handlePageChange}
+          />
+        </Col>
+      </Row>
+      <Row>{renderRoomsAsCardFiltered()}</Row>
+      <Row>
+        <Col md={6} className="d-flex align-items-center justify-content-end">
+          <RoomPaginator
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handleGoToPage={handlePageChange}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

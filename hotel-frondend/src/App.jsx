@@ -8,6 +8,8 @@ import ManageRooms from "./components/room/ManageRooms";
 import Home from "./components/home/Home";
 import EditRoom from "./components/room/EditRoom";
 import AddRoom from "./components/room/AddRoom";
+import RoomsListWrapper from "./components/room/RoomsListWrapper";
+
 function App() {
   return (
     <>
@@ -19,6 +21,7 @@ function App() {
             <Route exact path="/add-room" element={<AddRoom />} />
             <Route exact path="/manage-rooms" element={<ManageRooms />} />
             <Route exact path="/edit-room/:roomId" element={<EditRoom />} />
+            <Route exact path="/browse-all-rooms" element={<RoomsListWrapper />} />
           </Routes>
         </Router>
         <Footer />

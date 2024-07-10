@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, Col } from "react-bootstrap";
-import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 
 const RoomCard = ({ room }) => {
   return (
@@ -19,14 +18,14 @@ const RoomCard = ({ room }) => {
           <div className="flex-grow-1 ml-3 px-5">
             <Card.Title className="hotel-color">{room.roomType}</Card.Title>
             <Card.Title className="room-price">
-              Price: ${room.roomPrice}
+              Price: ${room.roomPrice} / night
             </Card.Title>
             <Card.Text>
               Some room informations goes here for the guest to read through
             </Card.Text>
           </div>
-          <div className="flex-shrink-0 mt-3 ">
-            <Link to={`/bookings/${room.id}`} className="btn btn-hotel btn-sm">
+          <div className="flex-shrink-0 mt-3">
+            <Link to={`/book-room/${room.id}`} className="btn btn-hotel btn-sm">
               Book Now 
             </Link>
           </div>
