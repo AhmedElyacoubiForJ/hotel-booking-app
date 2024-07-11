@@ -8,7 +8,7 @@ import RoomFilter from "../common/RoomFilter";
 
 import { getAllRooms, deleteRoom } from "../utils/ApiFunctions";
 
-const ManageRooms = () => {
+const RoomsCRUD = () => {
   const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -184,7 +184,7 @@ const ManageRooms = () => {
   );
 };
 
-export default ManageRooms;
+export default RoomsCRUD;
 
 // roomsFiltered.map((room) => (
 //   <div key={room.id}>
