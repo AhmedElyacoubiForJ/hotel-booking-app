@@ -48,5 +48,4 @@ class RoomRepositoryTest {
         assertTrue(result.contains("Standard Room"));
         assertTrue(result.contains("Deluxe Room"));*/
     }
-
 }
