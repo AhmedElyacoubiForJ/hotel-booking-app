@@ -8,10 +8,11 @@ const Home = () => {
   return (
     <section>
       <MainHeader />
-      <div className="container">
+      <section className="container">
         <Parallax />
         <HotelService />
-      </div>
+        <Parallax />
+      </section>
     </section>
   );
 };
