@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container } from "react-bootstrap"
 
+// The Parallax effect apply different speeds of the background and foreground in a div-parallax container.
 const Parallax = () => {
   return (
     <div className="parallax mb-5">
