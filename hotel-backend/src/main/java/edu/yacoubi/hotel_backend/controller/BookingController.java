@@ -5,9 +5,7 @@ import edu.yacoubi.hotel_backend.model.BookedRoom;
 import edu.yacoubi.hotel_backend.service.IBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,12 +17,18 @@ import static java.util.stream.Collectors.toList;
 public class BookingController {
     private final IBookingService bookingService;
 
-    @RequestMapping()
+    @GetMapping()
     public ResponseEntity<List<BookingResponse>> getAllBookings() {
         List<BookedRoom> bookings = bookingService.getAllBookings();
         List<BookingResponse> bookingResponses = getBookingResponses(bookings);
-
         return ResponseEntity.ok(bookingResponses);
+    }
+
+    @GetMapping("/confirmation/{code}")
+    public ResponseEntity<BookedRoom> getBookingByConfirmationCode(@PathVariable("code") String code) {
+        BookedRoom booking = bookingService.getBookingByConfirmationCode(code);
+
+        return ResponseEntity.ok(booking); // Dummy
     }
 
     private List<BookingResponse> getBookingResponses(List<BookedRoom> bookings) {
@@ -38,7 +42,7 @@ public class BookingController {
     }
 
 //    @RequestMapping("/{roomId}")
-//    public ResponseEntity<List<BookingResponse>> getAllBookingsByRoomId(@RequestParam("roomId") Long roomId) {
+//    public ResponseEntity<List<BookingResponse>> getAllBookingsByRoomId(@PathVariable("roomId") Long roomId) {
 //        //List<BookingResponse> bookingResponseList = bookingService.getAllBookingsByRoomId(roomId);
 //        return ResponseEntity.ok(List.of());
 //    }
