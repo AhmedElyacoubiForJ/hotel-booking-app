@@ -16,7 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Booking {
+public class BookedRoom {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long bookingId;

@@ -2,7 +2,7 @@ package edu.yacoubi.hotel_backend.controller;
 
 import edu.yacoubi.hotel_backend.dto.BookingResponse;
 import edu.yacoubi.hotel_backend.dto.RoomResponse;
-import edu.yacoubi.hotel_backend.model.Booking;
+import edu.yacoubi.hotel_backend.model.BookedRoom;
 import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.service.IBookingService;
 import edu.yacoubi.hotel_backend.service.IRoomService;
@@ -14,11 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.apache.commons.codec.binary.Base64;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -132,9 +128,9 @@ public class RoomController {
     }
 
     private List<BookingResponse> getBookingResponseList(Room room) {
-        List<Booking> bookings = getAllBookingsByRoomId(room.getId());
+        List<BookedRoom> bookedRooms = getAllBookingsByRoomId(room.getId());
         // BookedRoom list to response dto list
-        List<BookingResponse> bookingResponseList = bookings.stream()
+        List<BookingResponse> bookingResponseList = bookedRooms.stream()
                 .map(booking -> new BookingResponse(
                         booking.getBookingId(),
                         booking.getCheckInDate(),
@@ -144,7 +140,7 @@ public class RoomController {
         return bookingResponseList;
     }
 
-    private List<Booking> getAllBookingsByRoomId(Long roomId) {
+    private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return bookingService.getAllBookingsByRoomId(roomId);
     }
 }
