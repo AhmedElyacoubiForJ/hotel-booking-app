@@ -28,17 +28,18 @@ public class Room {
     private boolean isBooked = false;
     @Lob
     private Blob photo;
+
     @OneToMany(mappedBy = "room", fetch = LAZY, cascade = ALL)
-    private List<BookedRoom> bookedRooms; // historical
+    private List<BookedRoom> bookings; // historical
 
     public Room() {
-        this.bookedRooms = new ArrayList<>();
+        this.bookings = new ArrayList<>();
     }
     public void addBooking(BookedRoom bookedRoom){
-        if (bookedRooms == null){
-            bookedRooms = new ArrayList<>();
+        if (bookings == null){
+            bookings = new ArrayList<>();
         }
-        bookedRooms.add(bookedRoom);
+        bookings.add(bookedRoom);
         bookedRoom.setRoom(this);
         isBooked = true;
         String bookingCode = RandomStringUtils.randomNumeric(10);
