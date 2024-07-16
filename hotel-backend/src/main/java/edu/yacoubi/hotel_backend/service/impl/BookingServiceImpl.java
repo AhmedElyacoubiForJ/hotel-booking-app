@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class BookingServiceImpl implements IBookingService {
         validateBookingRequest(roomId, bookingRequest);
 
         Room room = roomService.getRoomById(roomId);
-        List<BookedRoom> existingBookings = room.getBookings();
+        Set<BookedRoom> existingBookings = room.getBookings();
         boolean isRoomAvailable = isRoomAvailableForBooking(
                 bookingRequest.getCheckInDate(),
                 bookingRequest.getCheckOutDate(),
@@ -96,7 +97,7 @@ public class BookingServiceImpl implements IBookingService {
 
     private boolean isRoomAvailableForBooking(LocalDate requestedCheckInDate,
                                               LocalDate requestedCheckOutDate,
-                                              List<BookedRoom> existingBookings) {
+                                              Set<BookedRoom> existingBookings) {
         return existingBookings.stream()
                 .noneMatch(existingBooking -> {
                     LocalDate existingBookingCheckInDate = existingBooking.getCheckInDate();

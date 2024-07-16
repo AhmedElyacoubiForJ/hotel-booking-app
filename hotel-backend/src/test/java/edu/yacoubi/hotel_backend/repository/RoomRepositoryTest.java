@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.emptySet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 /*
@@ -43,7 +43,7 @@ class RoomRepositoryTest {
     // given
     Room room1 = new Room();
     room1.setRoomType("Standard Room");
-    room1.setBookings(Collections.emptyList());
+    room1.setBookings(emptySet());
     room1.setPhoto(null);
     room1.setRoomPrice(new BigDecimal(100));
     underTest.save(room1);

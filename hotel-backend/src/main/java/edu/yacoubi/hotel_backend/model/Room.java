@@ -9,7 +9,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
@@ -30,19 +32,24 @@ public class Room {
     private Blob photo;
 
     @OneToMany(mappedBy = "room", fetch = LAZY, cascade = ALL)
-    private List<BookedRoom> bookings; // historical
+    private Set<BookedRoom> bookings;
 
     public Room() {
-        this.bookings = new ArrayList<>();
+        this.bookings = new HashSet<>();
     }
-    public void addBooking(BookedRoom bookedRoom){
+    public void addBooking(BookedRoom booking){
         if (bookings == null){
-            bookings = new ArrayList<>();
+            bookings = new HashSet<>();
         }
-        bookings.add(bookedRoom);
-        bookedRoom.setRoom(this);
+        this.bookings.add(booking);
+        booking.setRoom(this);
         isBooked = true;
-        String bookingCode = RandomStringUtils.randomNumeric(10);
-        bookedRoom.setBookingConfirmationCode(bookingCode);
+        booking.setBookingConfirmationCode(RandomStringUtils.randomNumeric(10));
+    }
+
+    public void removeBooking(BookedRoom booking){
+        this.bookings.remove(booking);
+        booking.setRoom(null);
+        isBooked = false;
     }
 }
