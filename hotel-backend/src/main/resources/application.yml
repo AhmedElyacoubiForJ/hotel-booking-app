@@ -5,7 +5,7 @@ spring:
   application:
     name: hotel-backend
   profiles:
-    active:  test #${ACTIVE_PROFILE:dev}
+    active:  ${ACTIVE_PROFILE:dev} # test
   output:
     ansi:
       enabled: always
