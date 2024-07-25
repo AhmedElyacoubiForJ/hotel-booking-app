@@ -7,10 +7,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import static java.util.Collections.emptySet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,15 +42,11 @@ class RoomRepositoryTest {
         // given
         Room room1 = new Room();
         room1.setRoomType("Standard Room");
-        room1.setBookings(emptySet());
-        room1.setPhoto(null);
-        room1.setRoomPrice(new BigDecimal(100));
-        underTest.save(room1);
-
         Room room2 = new Room();
         room2.setRoomType("Standard Room");
         Room room3 = new Room();
         room3.setRoomType("Deluxe Room");
+
         underTest.saveAll(List.of(room1, room2, room3));
 
         // when
@@ -60,7 +54,6 @@ class RoomRepositoryTest {
 
         // then
         assertEquals(2, result.size());
-        //assertEquals(List.of("Standard Room", "Deluxe Room"), result);
         assertTrue(result.contains("Standard Room"));
         assertTrue(result.contains("Deluxe Room"));
     }
