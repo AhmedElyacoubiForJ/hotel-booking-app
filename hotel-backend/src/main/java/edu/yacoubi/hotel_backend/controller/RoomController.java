@@ -7,6 +7,9 @@ import edu.yacoubi.hotel_backend.model.Room;
 import edu.yacoubi.hotel_backend.service.IBookingService;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.codec.binary.Base64;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/rooms")
 @CrossOrigin(origins = "http://localhost:5173/")
+@CacheConfig(cacheNames = "roomPhotos")
+@Slf4j
 public class RoomController {
 
     private final IRoomService roomService;
@@ -37,10 +41,9 @@ public class RoomController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<RoomResponse> addNewRoom(
-            @RequestParam("photo") final MultipartFile photo,
-            @RequestParam("roomType") final String roomType,
-            @RequestParam("roomPrice") final BigDecimal roomPrice) {
+    public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("photo") final MultipartFile photo,
+                                                   @RequestParam("roomType") final String roomType,
+                                                   @RequestParam("roomPrice") final BigDecimal roomPrice) {
 
         Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice);
         return ResponseEntity.ok(new RoomResponse(
@@ -59,6 +62,7 @@ public class RoomController {
             value = "/test/photo/{roomId}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE}
     )
+    //@Cacheable("roomPhotos")
     public ResponseEntity<byte[]> getRoomPhotoByRoomId(@PathVariable("roomId") Long roomId) {
         byte[] photoBytes = roomService.getPhotoByRoomId(roomId);
         return ResponseEntity.ok().body(photoBytes);
@@ -93,19 +97,16 @@ public class RoomController {
                                                    @RequestParam(value = "roomType") final String roomType,
                                                    @RequestParam(value = "roomPrice") final BigDecimal roomPrice,
                                                    @RequestParam(value = "photo") final MultipartFile photoFile) {
-        System.out.println("updateRoom");
+
         Room updatedRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoFile);
         RoomResponse roomResponse = roomToRoomResponse(updatedRoom);
         return ResponseEntity.ok().body(roomResponse);
     }
 
     private List<RoomResponse> getAllRoomResponse(List<Room> rooms) {
-        List<RoomResponse> responseList = new ArrayList<>();
-        for (Room room : rooms) {
-            RoomResponse roomResponse = roomToRoomResponse(room);
-            responseList.add(roomResponse);
-        }
-        return responseList;
+        return rooms.stream()
+                .map(this::roomToRoomResponse)
+                .collect(Collectors.toList());
     }
 
     private RoomResponse roomToRoomResponse(Room room) {
