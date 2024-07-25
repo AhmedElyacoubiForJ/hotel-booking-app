@@ -24,109 +24,121 @@ import java.util.List;
 @Transactional
 public class RoomServiceImpl implements IRoomService {
 
+    private static final String ROOM_NOT_FOUND_MESSAGE = "Room for ID: %d does not exist";
     private final RoomRepository roomRepository;
-    private String NOT_FOUND_MESSAGE = "Room with ID(%d) does not exist";
 
     @Override
     public List<Room> getAllRooms() {
+        log.debug("Getting all rooms");
         return roomRepository.findAllRoomsIdSorted();
-        //return roomRepository.findAll();
     }
 
     @Override
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice) {
-        if (roomType == null || roomType.isEmpty()) {
-            throw new IllegalArgumentException("Room type cannot be null or empty");
-        }
-        if (roomPrice == null) {
-            throw new IllegalArgumentException("Room price cannot be null");
-        }
-
-        Room room = new Room();
-        room.setRoomType(roomType);
-        room.setRoomPrice(roomPrice);
+        // validate input parameters
+        validateRoomTypeAndPrice(roomType, roomPrice);
+        validateFile(file);
 
         try {
-            if (!file.isEmpty()) {
-                byte[] photoBytes = file.getBytes();
-                Blob photoBlob = new SerialBlob(photoBytes);
-                room.setPhoto(photoBlob);
-            }
+            Room room = createRoom(file, roomType, roomPrice);
+            log.info("Room added successfully: {}", room);
+            return roomRepository.save(room);
         } catch (IOException | SQLException e) {
-            throw new RuntimeException("Error processing room photo", e);
+            throw new InternalServerException("Error processing room photo: " + e.getMessage());
+
         }
-        return roomRepository.save(room);
     }
 
     @Override
     public List<String> getAllRoomTypes() {
+        log.debug("Getting all room types");
         return roomRepository.findDistinctRoomTypes();
     }
 
     @Override
     public byte[] getPhotoByRoomId(Long id) {
-        if (!roomRepository.existsById(id))
-            throw new RoomNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
-
+        log.debug("Getting photo for room ID: {}", id);
+        validateRoomId(id);
         return roomRepository.findPhotoByRoomId(id);
     }
 
     @Override
     public void deleteRoom(Long id) {
-        if (!roomRepository.existsById(id))
-            throw new RoomNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
-
+        log.debug("Deleting room for ID: {}", id);
+        validateRoomId(id);
         roomRepository.deleteById(id);
+        log.info("Room deleted successfully: {}", id);
     }
 
     @Override
     public Room getRoomById(Long id) {
+        log.debug("Getting room for ID: {}", id);
         return roomRepository.findById(id)
-                .orElseThrow(() -> {
-                    String message = String.format(NOT_FOUND_MESSAGE, id);
-                    log.error(message);
-                    return new RoomNotFoundException(message);
-                });
+                .orElseThrow(() -> new RoomNotFoundException(String.format(ROOM_NOT_FOUND_MESSAGE, id)));
     }
 
     @Override
     public Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, MultipartFile file) {
-        // 1. parameters check
-        Room room = getRoomById(roomId);
+        log.debug("Updating room for ID: {}", roomId);
+        validateRoomId(roomId);
+        validateRoomTypeAndPrice(roomType, roomPrice);
+        validateFile(file);
 
+        Room room = getRoomById(roomId);
+        updateRoomProperties(room, roomType, roomPrice, file);
+        return roomRepository.save(room);
+    }
+
+    private void updateRoomProperties(Room room, String roomType, BigDecimal roomPrice, MultipartFile file) {
+        room.setRoomType(roomType);
+        room.setRoomPrice(roomPrice);
+
+        try {
+            byte[] photoBytes = file.getBytes();
+            Blob photoBlob = new SerialBlob(photoBytes);
+            room.setPhoto(photoBlob);
+        } catch (IOException | SQLException e) {
+            throw new InternalServerException("Error processing room photo: " + e.getMessage());
+        }
+    }
+
+    private Room createRoom(MultipartFile file, String roomType, BigDecimal roomPrice) throws IOException, SQLException {
+        Room room = new Room();
+        room.setRoomType(roomType);
+        room.setRoomPrice(roomPrice);
+
+        if (!file.isEmpty()) {
+            byte[] photoBytes = file.getBytes();
+            Blob photoBlob = new SerialBlob(photoBytes);
+            room.setPhoto(photoBlob);
+        }
+
+        return room;
+    }
+
+    private void validateFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Room photo cannot be null or empty");
+        }
+        if (!file.getContentType().startsWith("image/")) {
+            throw new IllegalArgumentException("Invalid room photo format. Only JPEG and PNG are supported");
+        }
+        if (file.getSize() > 10 * 1024 * 1024) {
+            throw new IllegalArgumentException("Room photo size exceeds the maximum allowed size of 10MB");
+        }
+    }
+
+    private void validateRoomTypeAndPrice(String roomType, BigDecimal roomPrice) {
         if (roomType == null || roomType.isEmpty()) {
             throw new IllegalArgumentException("Room type cannot be null or empty");
         }
         if (roomPrice == null) {
             throw new IllegalArgumentException("Room price cannot be null");
         }
-        if (file == null ) {
-            throw new IllegalArgumentException("Photo cannot be null or empty");
-        }
+    }
 
-        // 2. update room properties
-        // 2.1 update room type
-        room.setRoomType(roomType);
-        // 2.2 update room price
-        room.setRoomPrice(roomPrice);
-
-        byte[] photoBytes = null;
-        try {
-            photoBytes = file.getBytes();
-        } catch (IOException ex) {
-            log.error("Error processing room photo", ex);
-            throw new InternalServerException("Error processing room photo");
-        }
-
-        try {
-            Blob photoBlob = new SerialBlob(photoBytes);
-            // 2.3 update photo
-            room.setPhoto(photoBlob);
-        } catch (SQLException ex) {
-            log.error("Error processing room photo", ex);
-            throw new InternalServerException("Error processing room photo");
-        }
-
-        return roomRepository.save(room);
+    private void validateRoomId(Long id) {
+        if (!roomRepository.existsById(id))
+            throw new RoomNotFoundException(String.format(ROOM_NOT_FOUND_MESSAGE, id));
     }
 }
