@@ -130,14 +130,13 @@ public class RoomController {
     private List<BookingResponse> getBookingResponseList(Room room) {
         List<BookedRoom> bookedRooms = getAllBookingsByRoomId(room.getId());
         // BookedRoom list to response dto list
-        List<BookingResponse> bookingResponseList = bookedRooms.stream()
+        return bookedRooms.stream()
                 .map(booking -> new BookingResponse(
                         booking.getBookingId(),
                         booking.getCheckInDate(),
                         booking.getCheckOutDate(),
                         booking.getBookingConfirmationCode())
                 ).collect(Collectors.toList());
-        return bookingResponseList;
     }
 
     private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {

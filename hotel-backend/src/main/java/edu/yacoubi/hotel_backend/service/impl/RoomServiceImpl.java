@@ -36,7 +36,6 @@ public class RoomServiceImpl implements IRoomService {
 
     @Override
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice) {
-        // validate input parameters
         validateRoomTypeAndPrice(roomType, roomPrice);
         validateFile(file);
 
@@ -103,7 +102,8 @@ public class RoomServiceImpl implements IRoomService {
         }
     }
 
-    private Room createRoom(MultipartFile file, String roomType, BigDecimal roomPrice) throws IOException, SQLException {
+    private Room createRoom(MultipartFile file, String roomType, BigDecimal roomPrice)
+            throws IOException, SQLException {
         Room room = new Room();
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);
