@@ -47,7 +47,7 @@ const AddRoom = () => {
   return (
     <>
       <section className="container mt-5 mb-5">
-        <div className="room justify-content-center">
+        <div className="row justify-content-center">
           <div className="col-md-8 col-lg-6">
             <h2 className="mt-5 mb-2">Add a New Room</h2>
             {successMessage && (
@@ -75,7 +75,7 @@ const AddRoom = () => {
                 </div>
               </div>
               <div className="mb-3">
-                <label className="form-label" htmlFor="roomType">
+                <label className="form-label" htmlFor="roomPrice">
                   Room Price
                 </label>
                 <input
