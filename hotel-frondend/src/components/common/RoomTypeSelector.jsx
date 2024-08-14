@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 import { getRoomTypes } from "../utils/ApiFunctions";
 
-const RoomTypeSelector = ({ room, handleOnChange }) => {
+const RoomTypeSelector = ({ newRoom, handleOnChange }) => {
   // roomType from db
-  const [roomTypes, setRoomTypes] = useState([""]);
+  const [roomTypes, setRoomTypes] = useState([]);
   // show input field to specify a new room type, if is not already defined
-  const [showInputForNewRoomType, setShowInputForNewRoomType] = useState(false);
+  const [showNewRoomTypeInput, setShowNewRoomTypeInput] = useState(false);
   const [newRoomType, setNewRoomType] = useState("");
 
   const handleAddNewRoomType = () => {
@@ -15,7 +14,7 @@ const RoomTypeSelector = ({ room, handleOnChange }) => {
       setRoomTypes([...roomTypes, newRoomType]);
       setNewRoomType("");
     }
-    setShowInputForNewRoomType(false);
+    setShowNewRoomTypeInput(false);
   };
 
   useEffect(() => {
@@ -32,10 +31,10 @@ const RoomTypeSelector = ({ room, handleOnChange }) => {
             className="form-select"
             id="roomType"
             name="roomType"
-            value={room.roomType}
+            value={newRoom.roomType}
             onChange={(e) => {
               if (e.target.value === "Add New") {
-                setShowInputForNewRoomType(true);
+                setShowNewRoomTypeInput(true);
               } else {
                 handleOnChange(e);
               }
@@ -49,7 +48,7 @@ const RoomTypeSelector = ({ room, handleOnChange }) => {
               </option>
             ))}
           </select>
-          {showInputForNewRoomType && (
+          {showNewRoomTypeInput && (
             <div className="input-group">
               <input
                 type="text"

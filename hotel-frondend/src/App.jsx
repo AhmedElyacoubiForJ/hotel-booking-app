@@ -22,7 +22,11 @@ function App() {
             <Route exact path="/add-room" element={<AddRoom />} />
             <Route exact path="/rooms-crud" element={<RoomsCRUD />} />
             <Route exact path="/edit-room/:roomId" element={<EditRoom />} />
-            <Route exact path="/browse-all-rooms" element={<RoomsListWrapper />} />
+            <Route
+              exact
+              path="/browse-all-rooms"
+              element={<RoomsListWrapper />}
+            />
             <Route exact path="/admin" element={<Admin />} />
             {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>

@@ -69,7 +69,7 @@ const AddRoom = () => {
                 </label>
                 <div>
                   <RoomTypeSelector
-                    room={room}
+                    newRoom={room}
                     handleOnChange={handleOnChange}
                   />
                 </div>
