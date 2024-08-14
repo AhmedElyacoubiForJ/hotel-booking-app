@@ -177,6 +177,7 @@ class RoomServiceImplTest {
         BigDecimal roomPrice = new BigDecimal(100);
         Room existingRoom = new Room();
         existingRoom.setId(roomId);
+        when(roomRepository.existsById(roomId)).thenReturn(true);
         when(roomRepository.findById(roomId)).thenReturn(Optional.of(existingRoom));
 
         // when
@@ -192,18 +193,50 @@ class RoomServiceImplTest {
     }
 
     @Test
-    void shouldThrownIllegalArgumentExceptionWhenUpdatingRoomWithInvalidParameters() {
+    void shouldThrownIllegalArgumentExceptionWhenUpdatingRoomWithNullRoomType() {
         // given
         Long roomId = 1L;
-        String roomType = "Single Room";
+        String roomType = null;
         BigDecimal roomPrice = BigDecimal.valueOf(100);
         MultipartFile file = new MockMultipartFile("photo", "photo.jpg", "image/jpeg", "photo content".getBytes());
         when(roomRepository.findById(eq(roomId))).thenReturn(Optional.of(new Room()));
 
         // when
-        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, null, roomPrice, file));
-        //assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, null, file));
-        //assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, null));
+        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, file));
+
+        // then
+        verify(roomRepository).findById(eq(roomId));
+        verify(roomRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldThrownIllegalArgumentExceptionWhenUpdatingRoomWithNullRoomPrice() {
+        // given
+        Long roomId = 1L;
+        String roomType = "Single Room";
+        BigDecimal roomPrice = null;
+        MultipartFile file = new MockMultipartFile("photo", "photo.jpg", "image/jpeg", "photo content".getBytes());
+        when(roomRepository.findById(eq(roomId))).thenReturn(Optional.of(new Room()));
+
+        // when
+        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, file));
+
+        // then
+        verify(roomRepository).findById(eq(roomId));
+        verify(roomRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldThrownIllegalArgumentExceptionWhenUpdatingRoomWithNullFile() {
+        // given
+        Long roomId = 1L;
+        String roomType = "Single Room";
+        BigDecimal roomPrice = BigDecimal.valueOf(100);
+        MultipartFile file = null;
+        when(roomRepository.findById(eq(roomId))).thenReturn(Optional.of(new Room()));
+
+        // when
+        assertThrows(IllegalArgumentException.class, () -> underTest.updateRoom(roomId, roomType, roomPrice, file));
 
         // then
         verify(roomRepository).findById(eq(roomId));

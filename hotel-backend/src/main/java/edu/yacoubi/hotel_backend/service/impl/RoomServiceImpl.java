@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -120,7 +121,7 @@ public class RoomServiceImpl implements IRoomService {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Room photo cannot be null or empty");
         }
-        if (!file.getContentType().startsWith("image/")) {
+        if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
             throw new IllegalArgumentException("Invalid room photo format. Only JPEG and PNG are supported");
         }
         if (file.getSize() > 10 * 1024 * 1024) {

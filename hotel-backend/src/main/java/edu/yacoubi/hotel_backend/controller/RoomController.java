@@ -46,11 +46,10 @@ public class RoomController {
                                                    @RequestParam("roomPrice") final BigDecimal roomPrice) {
 
         Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice);
-        return ResponseEntity.ok(new RoomResponse(
-                savedRoom.getId(),
-                savedRoom.getRoomType(),
-                savedRoom.getRoomPrice()
-        ));
+        RoomResponse roomResponse = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(),
+                savedRoom.getRoomPrice());
+
+        return ResponseEntity.ok(roomResponse);
     }
 
     @GetMapping("/room/types")
