@@ -8,14 +8,12 @@ import edu.yacoubi.hotel_backend.service.IBookingService;
 import edu.yacoubi.hotel_backend.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import org.apache.commons.codec.binary.Base64;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -71,7 +69,7 @@ public class RoomController {
     public ResponseEntity<String> getRoomPhotoEncodedByRoomId(@PathVariable("roomId") Long roomId) {
         byte[] photoBytes = roomService.getPhotoByRoomId(roomId);
 
-        String photoBase64 =  photoBytes != null
+        String photoBase64 = photoBytes != null
                 ? new String(new Base64().encode(photoBytes))
                 : null;
 
@@ -112,7 +110,7 @@ public class RoomController {
         RoomResponse roomResponse = new RoomResponse();
         byte[] photoBytes = roomService.getPhotoByRoomId(room.getId());
 
-        String photoBase64 =  photoBytes != null
+        String photoBase64 = photoBytes != null
                 ? new String(new Base64().encode(photoBytes))
                 : null;
 
@@ -120,16 +118,15 @@ public class RoomController {
         roomResponse.setRoomType(room.getRoomType());
         roomResponse.setRoomPrice(room.getRoomPrice());
         roomResponse.setPhoto(photoBase64);
-        // getting the history for each room
-        //List<BookingResponse> bookingResponseList = getBookingResponseList(room);
-        roomResponse.setBookings(Collections.EMPTY_LIST);
-
+        // getting the history for the room
+        List<BookingResponse> bookingResponseList = getBookingResponseList(room.getId());
+        //roomResponse.setBookings(Collections.EMPTY_LIST);
+        roomResponse.setBookings(bookingResponseList);
         return roomResponse;
     }
 
-    private List<BookingResponse> getBookingResponseList(Room room) {
-        List<BookedRoom> bookedRooms = getAllBookingsByRoomId(room.getId());
-        // BookedRoom list to response dto list
+    private List<BookingResponse> getBookingResponseList(Long roomId) {
+        List<BookedRoom> bookedRooms = getAllBookingsByRoomId(roomId);
         return bookedRooms.stream()
                 .map(booking -> new BookingResponse(
                         booking.getBookingId(),
