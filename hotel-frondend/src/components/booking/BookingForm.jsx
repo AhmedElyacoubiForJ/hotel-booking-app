@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { moment } from "moment";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Form, FormControl, Button } from "react-bootstrap";
+import { Form, FormControl, Button, Alert } from "react-bootstrap";
 
 import { getRoomById, bookRoom } from "../utils/ApiFunctions";
 
 const BookingForm = () => {
   const { roomId } = useParams();
+  const [validated, setValidated] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [roomPrice, setRoomPrice] = useState(0);
@@ -95,9 +96,11 @@ const BookingForm = () => {
       setErrorMessage(
         "Please fill in all required fields and ensure the check-out date is after the check-in date."
       );
+      setValidated(false);
       return false;
     }
 
+    setValidated(true);
     return true;
   };
 
@@ -112,9 +115,9 @@ const BookingForm = () => {
       {isSubmitted && (
         <Alert variant="success">Booking submitted successfully!</Alert>
       )}
-      <Form onSubmit={handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Guest Name:</Form.Label>
+          <Form.Label>Fullname:</Form.Label>
           <FormControl
             type="text"
             name="guestName"
