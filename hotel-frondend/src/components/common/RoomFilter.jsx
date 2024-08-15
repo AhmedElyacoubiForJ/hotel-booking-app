@@ -3,19 +3,19 @@ import React, { useState } from "react";
 // Room Types Chooser
 const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
   const HEADER_OPTION = "All";
-  const [selectedOption, setSelectedOption] = useState(HEADER_OPTION);
+  const [filter, setFilter] = useState(HEADER_OPTION);
   const roomTypeOptions = new Set(allRooms.map((room) => room.roomType));
 
   const roomTypes = [HEADER_OPTION, ...roomTypeOptions];
 
   const handleSelectedChange  = (e) => {
-    const selected = e.target.value;
-    setSelectedOption(selected);
-    setSelectedRoomType(selected);
+    const selectedRoomType = e.target.value;
+    setFilter(selectedRoomType);
+    setSelectedRoomType(selectedRoomType);
   };
 
   const clearFilter = () => {
-    setSelectedOption(HEADER_OPTION);
+    setFilter(HEADER_OPTION);
     setSelectedRoomType(HEADER_OPTION);
   };
 
@@ -28,7 +28,7 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
         <select
           className="form-select"
           arial-label="room type filter"
-          value={selectedOption}
+          value={filter}
           onChange={handleSelectedChange}
         >
           {roomTypes.map((type, index) => (
