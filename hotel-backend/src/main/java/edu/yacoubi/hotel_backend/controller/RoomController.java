@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,6 +116,7 @@ public class RoomController {
         roomResponse.setId(room.getId());
         roomResponse.setRoomType(room.getRoomType());
         roomResponse.setRoomPrice(room.getRoomPrice());
+        roomResponse.setBooked(room.isBooked());
         roomResponse.setPhoto(photoBase64);
         // getting the history for the room
         List<BookingResponse> bookingResponseList = getBookingResponseList(room.getId());
@@ -126,8 +126,8 @@ public class RoomController {
     }
 
     private List<BookingResponse> getBookingResponseList(Long roomId) {
-        List<BookedRoom> bookedRooms = getAllBookingsByRoomId(roomId);
-        return bookedRooms.stream()
+        List<BookedRoom> bookings = getAllBookingsByRoomId(roomId);
+        return bookings.stream()
                 .map(booking -> new BookingResponse(
                         booking.getBookingId(),
                         booking.getCheckInDate(),
