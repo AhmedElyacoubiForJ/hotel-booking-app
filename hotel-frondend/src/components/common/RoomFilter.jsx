@@ -8,7 +8,7 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
 
   const roomTypes = [HEADER_OPTION, ...roomTypeOptions];
 
-  const handleSelectedChange  = (e) => {
+  const handleSelectedChange = (e) => {
     const selectedRoomType = e.target.value;
     setFilter(selectedRoomType);
     setSelectedRoomType(selectedRoomType);
@@ -37,11 +37,7 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
             </option>
           ))}
         </select>
-        <button
-          className="btn btn-hotel"
-          type="button"
-          onClick={clearFilter}
-        >
+        <button className="btn btn-hotel" type="button" onClick={clearFilter}>
           Clear Filter
         </button>
       </div>

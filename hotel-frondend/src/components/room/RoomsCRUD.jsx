@@ -19,7 +19,7 @@ const RoomsCRUD = () => {
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [roomsPerPage] = useState(2);
+  const [roomsPerPage] = useState(6);
   const [numberOfPages, setNumberOfPages] = useState(0);
 
   const handleGoToPage = (page) => {
@@ -27,7 +27,6 @@ const RoomsCRUD = () => {
   };
 
   const calculateTotalPages = (rooms, roomsFiltered, roomsPerPage) => {
-    console.log("Calculating total pages");
     const totalRooms =
       roomsFiltered.length > 0 ? roomsFiltered.length : rooms.length;
     return Math.ceil(totalRooms / roomsPerPage);
@@ -185,11 +184,3 @@ const RoomsCRUD = () => {
 };
 
 export default RoomsCRUD;
-
-// roomsFiltered.map((room) => (
-//   <div key={room.id}>
-//     <h3>{room.roomType}</h3>
-//     <p>{room.roomPrice}</p>
-//     {/* <img src={`data:image/png;base64,${room.photo}`} ></img> */}
-//   </div>
-// ))

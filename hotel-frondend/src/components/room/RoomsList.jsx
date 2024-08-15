@@ -9,7 +9,8 @@ import RoomPaginator from "../common/RoomPaginator";
 
 const RoomsList = () => {
   const [rooms, setRooms] = useState([]);
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [roomsPerPage] = useState(6);
@@ -25,14 +26,13 @@ const RoomsList = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        setError(error.message);
+        setErrorMessage(error.message);
         setIsLoading(false);
       });
   }, []);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
+  
 
   const totalPages = Math.ceil(filteredRooms.length / roomsPerPage);
 
@@ -44,7 +44,7 @@ const RoomsList = () => {
     });
   };
 
-  const doFilterRoomsByRoomType = (keyword) => {
+  const filterRoomsByRoomType = (keyword) => {
     if (keyword === "" || keyword === "All") {
       setFilteredRooms(rooms);
     } else {
@@ -55,13 +55,13 @@ const RoomsList = () => {
   };
 
   useEffect(() => {
-    doFilterRoomsByRoomType(selectedRoomType);
+    filterRoomsByRoomType(selectedRoomType);
   }, [rooms, selectedRoomType]);
 
   if (isLoading) {
     return <div>Loading rooms...</div>;
   }
-  if (error) {
+  if (errorMessage) {
     return <div className="text-danger">Error: {error}</div>;
   }
 
@@ -69,7 +69,10 @@ const RoomsList = () => {
     <Container>
       <Row>
         <Col md={6} className="mb-3 mb-md-0">
-          <RoomFilter allRooms={rooms} setSelectedRoomType={setSelectedRoomType} />
+          <RoomFilter
+            allRooms={rooms}
+            setSelectedRoomType={setSelectedRoomType}
+          />
         </Col>
         <Col md={6} className="d-flex align-items-center justify-content-end">
           <RoomPaginator
