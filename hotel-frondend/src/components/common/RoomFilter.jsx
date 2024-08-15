@@ -2,21 +2,21 @@ import React, { useState } from "react";
 
 // Room Types Chooser
 const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
-  const headerOption = "All";
-  const [selectedOption, setSelectedOption] = useState(headerOption);
+  const HEADER_OPTION = "All";
+  const [selectedOption, setSelectedOption] = useState(HEADER_OPTION);
   const roomTypeOptions = new Set(allRooms.map((room) => room.roomType));
 
-  const roomTypes = [headerOption, ...roomTypeOptions];
+  const roomTypes = [HEADER_OPTION, ...roomTypeOptions];
 
-  const onSelectedChange = (e) => {
+  const handleSelectedChange  = (e) => {
     const selected = e.target.value;
     setSelectedOption(selected);
     setSelectedRoomType(selected);
   };
 
-  const makeDefaultOption = () => {
-    setSelectedOption(headerOption);
-    setSelectedRoomType(headerOption);
+  const clearFilter = () => {
+    setSelectedOption(HEADER_OPTION);
+    setSelectedRoomType(HEADER_OPTION);
   };
 
   return (
@@ -29,7 +29,7 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
           className="form-select"
           arial-label="room type filter"
           value={selectedOption}
-          onChange={onSelectedChange}
+          onChange={handleSelectedChange}
         >
           {roomTypes.map((type, index) => (
             <option key={index} value={type}>
@@ -40,7 +40,7 @@ const RoomFilter = ({ allRooms, setSelectedRoomType }) => {
         <button
           className="btn btn-hotel"
           type="button"
-          onClick={makeDefaultOption}
+          onClick={clearFilter}
         >
           Clear Filter
         </button>
